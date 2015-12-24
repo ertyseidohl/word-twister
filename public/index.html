@@ -9,10 +9,13 @@
 		function twist() {
 			document.getElementById('input-button').disabled = true;
 			document.getElementById('input-button').innerText = "Twisting...";
+			document.getElementById('output_1').innerText = "Twisting...";
+			document.getElementById('output_2').innerText = "Twisting...";
 			microAjax(
 				'./twist',
 				function(result) {
-					document.getElementById('output').innerText = result;
+					document.getElementById('output_1').innerText = result;
+					document.getElementById('output_2').innerText = result;
 					document.getElementById('input-button').disabled = false;
 					document.getElementById('input-button').innerText = "Twist!";
 				},
@@ -50,7 +53,12 @@
 			<h1>Lyrics Twister</h1>
 		</div>
 		<div class="row">
-			<div class="col-xs-6">
+			<div class="col-xs-12 visible-xs">
+				<div class="well">
+					<div id="output_1"></div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-6">
 				<div class="form-group">
 					<label for="input-textarea">Paste Song Lyrics Here (try <a href="#" onclick="tryWhiteXmas()">White Christmas</a> by Bing Crosby)</label>
 					<textarea id="input-textarea" class="form-control" rows="10" name="original" id=""></textarea>
@@ -64,8 +72,10 @@
 					<button id="input-button" onclick="twist()" class="btn btn-default">Twist!</button>
 				</div>
 			</div>
-			<div class="col-xs-6">
-				<div id="output"></div>
+			<div class="col-xs-12 col-md-6 hidden-xs">
+				<div class="well">
+					<div id="output_2"></div>
+				</div>
 			</div>
 		</div>
 	</div>
