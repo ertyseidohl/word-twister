@@ -3,6 +3,8 @@
 	var bodyParser = require('body-parser');
 	var parody = require('./parody/parody.js');
 
+	var port = process.env.PORT || 8000;
+
 	var app = express();
 
 	app.use(bodyParser.json());
@@ -19,7 +21,7 @@
 			});
 	});
 
-	app.listen(8000, function() {
-		console.log('Express server listening on port 8000');
+	app.listen(port, function() {
+		console.log('Express server listening on port ' + port);
 	});
 })();
