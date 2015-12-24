@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Word Twister</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<script src="./js/microajax.js"></script>
+	<script>
+		function twist() {
+			document.getElementById('input-button').disabled = true;
+			document.getElementById('input-button').innerText = "Twisting...";
+			microAjax(
+				'./twist',
+				function(result) {
+					document.getElementById('output').innerText = result;
+					document.getElementById('input-button').disabled = false;
+					document.getElementById('input-button').innerText = "Twist!";
+				},
+				JSON.stringify(
+					{
+						"original": document.getElementById("input-textarea").value,
+						"numMatching": document.getElementById("input-matchlevel").value
+					}
+				)
+			);
+		}
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="jumbotron">
+			<h1>Lyrics Twister</h1>
+		</div>
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="form-group">
+					<label for="input-textarea">Paste Song Lyrics Here</label>
+					<textarea id="input-textarea" class="form-control" rows="10" name="original" id=""></textarea>
+				</div>
+				<div class="form-group">
+					<label for="input-matchlevel">Match Amount (lower = wilder matches)</label>
+					<input class="form-control" onchange="document.getElementById('rangeValLabel').innerHTML = this.value;" type="range" name="input-matchlevel" id="input-matchlevel" value="3" min="1" max="5"/>
+					<span id="rangeValLabel">3</span>
+				</div>
+				<div class="form-group">
+					<button id="input-button" onclick="twist()" class="btn btn-default">Twist!</button>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div id="output"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "parody-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "body-parser": "^1.14.2",
+    "express": "^4.13.3",
+    "cmudict-to-sqlite": "^0.4.1",
+    "readline": "^1.2.1"
+  }
+}
