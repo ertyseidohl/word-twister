@@ -2,6 +2,7 @@
 	var express = require('express');
 	var bodyParser = require('body-parser');
 	var parody = require('./parody/parody.js');
+	var fs = require('fs');
 
 	var port = process.env.PORT || 8000;
 
@@ -19,6 +20,20 @@
 			function(parodyText) {
 				res.send(parodyText);
 			});
+	});
+
+	app.get('/loggg', function(req, res) {
+		fs.writeFile('./log.log', 'loggg\n', function(err) {
+			if (err) {
+				return res.send("err");
+			}
+			fs.readFile('./log.log', function(err, str) {
+				if (err) {
+					return res.send("nope");
+				}
+				res.send(str);
+			});
+		});
 	});
 
 	app.listen(port, function() {
