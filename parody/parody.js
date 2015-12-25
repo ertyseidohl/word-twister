@@ -134,7 +134,11 @@
 		}
 		var newPoemObj = createParody(input, numMatching);
 		whenComplete(newPoemObj, function(result) {
-			callback(result.join(' ').toLowerCase());
+			if (result.join) {
+				callback(result.join(' ').toLowerCase());
+			} else {
+				callback("An error occured. Please try again.");
+			}
 		}, 0);
 	}
 
