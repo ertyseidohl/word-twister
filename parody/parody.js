@@ -11,7 +11,7 @@
 	var isWordlistReady = false;
 
 	function log(text) {
-		fs.writeFile("./log.log", text + "\n", function(err) {
+		fs.appendFile("./log.log", text + "\n---\n", function(err) {
 			if(err) {
 				console.log(err);
 			}
@@ -31,7 +31,7 @@
 
 	function getRhymeForWord(poemRef, callback, index, numMatching) {
 		var word = poemRef[index];
-		cmu.lookupWord(word, function(err, rows) {
+		cmu.lookupWord(word, function(err, wordRows) {
 			if (word == "\n") {
 				callback("\n", index);
 				return;
@@ -40,36 +40,39 @@
 				callback(word, index);
 				return;
 			}
-			for (var r in rows) {
-				var syllableCount = rows[r].code.split(' ').length;
-				var rhymingPhoneme = getRhymingPhoneme(rows[r].code, numMatching);
-				cmu.fuzzyLookupCode(rhymingPhoneme, function(err, rows) {
-					var rhymingWords = rows.filter(function(row){
-						return row.code.split(' ').length == syllableCount;
-					}).filter(function(row) {
-						return row.word.toLowerCase() in englishWords;
-					}).map(function(row) {
-						return row.word;
-					});
-					var chosenRhyme;
-					if (!rhymingWords.length) {
-						chosenRhyme = word;
-					} else if (rhymingWords.length == 1) {
-						chosenRhyme = rhymingWords[0];
-					} else {
-						var tries = 0;
-						chosenRhyme = rhymingWords[Math.floor(Math.random() * rhymingWords.length)];
-						while (
-							tries < 3 &&
-							chosenRhyme.toLowerCase() == word.toLowerCase()
-						) {
-							chosenRhyme = rhymingWords[Math.floor(Math.random() * rhymingWords.length)];
-							tries ++;
-						}
-					}
-					callback(chosenRhyme, index);
-				});
+			if (wordRows.length === 0) {
+				callback(word, index);
+				return;
 			}
+			var wordProps = wordRows[0];
+			var syllableCount = wordProps.code.split(' ').length;
+			var rhymingPhoneme = getRhymingPhoneme(wordProps.code, numMatching);
+			cmu.fuzzyLookupCode(rhymingPhoneme, function(err, rows) {
+				var rhymingWords = rows.filter(function(row){
+					return row.code.split(' ').length == syllableCount;
+				}).filter(function(row) {
+					return row.word.toLowerCase() in englishWords;
+				}).map(function(row) {
+					return row.word;
+				});
+				var chosenRhyme;
+				if (!rhymingWords.length) {
+					chosenRhyme = word;
+				} else if (rhymingWords.length == 1) {
+					chosenRhyme = rhymingWords[0];
+				} else {
+					var tries = 0;
+					chosenRhyme = rhymingWords[Math.floor(Math.random() * rhymingWords.length)];
+					while (
+						tries < 3 &&
+						chosenRhyme.toLowerCase() == word.toLowerCase()
+					) {
+						chosenRhyme = rhymingWords[Math.floor(Math.random() * rhymingWords.length)];
+						tries ++;
+					}
+				}
+				callback(chosenRhyme, index);
+			});
 		});
 	}
 

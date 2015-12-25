@@ -23,7 +23,7 @@
 	});
 
 	app.get('/loggg', function(req, res) {
-		fs.writeFile('./log.log', 'loggg\n', function(err) {
+		fs.appendFile('./log.log', '\n---\nloggg\n---\n', function(err) {
 			if (err) {
 				return res.send("err");
 			}
